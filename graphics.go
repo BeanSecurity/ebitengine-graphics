@@ -16,6 +16,8 @@ type DrawOptions struct {
 	// We're using a pointer here mostly to decrease the [DrawOptions]
 	// object size as most of the time this field is going to be nil.
 	Blend *ebiten.Blend
+
+	Filter ebiten.Filter
 }
 
 type Object interface {

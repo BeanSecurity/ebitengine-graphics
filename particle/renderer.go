@@ -250,5 +250,6 @@ func (r *Renderer) drawBatch(dst, img *ebiten.Image, opts graphics.DrawOptions, 
 	}
 
 	var drawOptions ebiten.DrawTrianglesOptions
+	drawOptions.Filter = opts.Filter
 	dst.DrawTriangles(vertices, indices, img, &drawOptions)
 }

@@ -364,6 +364,7 @@ func (s *Sprite) DrawWithOptions(dst *ebiten.Image, opts DrawOptions) {
 	if opts.Blend != nil {
 		drawOptions.Blend = *opts.Blend
 	}
+	drawOptions.Filter = opts.Filter
 	drawOptions.ColorScale = s.ebitenColorScale
 
 	if s.IsHorizontallyFlipped() {

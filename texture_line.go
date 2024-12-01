@@ -188,6 +188,7 @@ func (l *TextureLine) DrawWithOptions(dst *ebiten.Image, opts DrawOptions) {
 		if opts.Blend != nil {
 			drawOptions.Blend = *opts.Blend
 		}
+		drawOptions.Filter = opts.Filter
 		dst.DrawTriangles(vertices, indices, l.texture, &drawOptions)
 		return
 	}

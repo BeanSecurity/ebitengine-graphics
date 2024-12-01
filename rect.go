@@ -197,6 +197,7 @@ func (rect *Rect) DrawWithOptions(dst *ebiten.Image, opts DrawOptions) {
 		if opts.Blend != nil {
 			drawOptions.Blend = *opts.Blend
 		}
+		drawOptions.Filter = opts.Filter
 		drawOptions.GeoM = rect.calculateGeom(rect.width, rect.height, finalOffset)
 		drawOptions.ColorScale = rect.fillColorScale.ToEbitenColorScale()
 		dst.DrawImage(whitePixel, &drawOptions)
@@ -205,11 +206,12 @@ func (rect *Rect) DrawWithOptions(dst *ebiten.Image, opts DrawOptions) {
 
 	if rect.fillColorScale.A == 0 && rect.outlineWidth >= 1 {
 		// Outline-only mode.
-		rect.drawOutline(dst, opts.Blend, finalOffset)
+		rect.drawOutline(dst, opts.Blend, opts.Filter, finalOffset)
+
 		return
 	}
 
-	rect.drawOutline(dst, opts.Blend, finalOffset)
+	rect.drawOutline(dst, opts.Blend, opts.Filter, finalOffset)
 
 	var drawOptions ebiten.DrawImageOptions
 	if opts.Blend != nil {
@@ -221,7 +223,7 @@ func (rect *Rect) DrawWithOptions(dst *ebiten.Image, opts DrawOptions) {
 	dst.DrawImage(whitePixel, &drawOptions)
 }
 
-func (rect *Rect) drawOutline(dst *ebiten.Image, blend *ebiten.Blend, offset gmath.Vec) {
+func (rect *Rect) drawOutline(dst *ebiten.Image, blend *ebiten.Blend, filter ebiten.Filter, offset gmath.Vec) {
 	if rect.outlineVertices == nil {
 		// Allocate these vertices lazily when we need them and then re-use them.
 		rect.outlineVertices = new([8]ebiten.Vertex)
@@ -308,6 +310,7 @@ func (rect *Rect) drawOutline(dst *ebiten.Image, blend *ebiten.Blend, offset gma
 	if blend != nil {
 		options.Blend = *blend
 	}
+	options.Filter = filter
 	dst.DrawTriangles(rect.outlineVertices[:], borderBoxIndices, whitePixel, &options)
 }
 
